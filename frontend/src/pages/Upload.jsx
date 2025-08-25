@@ -9,7 +9,7 @@ import axios from "axios";
 import { serverURL } from "../config.js";
 import { useDispatch, useSelector } from "react-redux";
 import { setPostData } from "../redux/postSlice.js";
-import { setStoryData } from "../redux/storySlice.js";
+import { setCurrentUserStory, setStoryData } from "../redux/storySlice.js";
 import { setLoopData } from "../redux/loopSlice.js";
 import { ClipLoader } from "react-spinners";
 import { setUserData } from "../redux/userSlice.js";
@@ -92,7 +92,7 @@ function Upload(req, res) {
         { withCredentials: true }
       );
 
-      dispatch(setLoopData([...loopData, result.data]));
+     dispatch(setCurrentUserStory(result.data)); 
       setLoading(false);
       navigate("/");
     } catch (error) {

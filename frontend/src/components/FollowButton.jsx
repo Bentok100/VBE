@@ -5,16 +5,15 @@ import { toggleFollow } from "../redux/userSlice";
 import axios from "axios";
 
 function FollowButton({ targetUserId, tailwind, onFollowChange }) {
-  const { following } = useSelector((state) => state.user);
-  const isFollowing = following.includes(targetUserId);
   const dispatch = useDispatch();
+  const following = useSelector((state) => state.user.following) || [];
+  const isFollowing = following.includes(targetUserId);
 
   const handleFollow = async () => {
     try {
-      const result = await axios.get(
-        `${serverURL}/api/user/follow/${targetUserId}`,
-        { withCredentials: true }
-      );
+      await axios.get(`${serverURL}/api/user/follow/${targetUserId}`, {
+        withCredentials: true,
+      });
 
       if (onFollowChange) onFollowChange();
 

@@ -11,7 +11,9 @@ import { useNavigate } from "react-router-dom";
 function Feed() {
   const { postData } = useSelector((state) => state.post);
   const { userData } = useSelector((state) => state.user);
+  const { storyList , currentUserStory } = useSelector((state) => state.story);
   const navigate = useNavigate();
+
   return (
     <div className="lg:w-[50%] w-full bg-black min-h-[100vh] lg:h-[100vh]  relative lg:overflow-y-auto">
       <div className="w-full h-[100px] flex items-center justify-between p-[20px] lg:hidden ">
@@ -27,9 +29,14 @@ function Feed() {
       <div className="flex w-full overflow-auto gap-[20px] items-center p-[10px]">
         <StoryDp
           userName={"Your Self"}
-          ProfileImage={userData.ProfileImage}
-          story={userData.story}
+          ProfileImage={userData.profileImage}
+          story={currentUserStory}
         />
+        {
+          storyList?.map((story,index)=>(
+            <StoryDp userName={story.author.userName} ProfileImage={story.author.profileImage} story={story} key={index} />
+          ))
+        }
       </div>
 
       <div className="w-full min-h-[100vh] flex flex-col items-center gap-[20px] p-[20px] pt-[40px] bg-white rounded-t-[60px] relative pb-[120px]">

@@ -9,29 +9,32 @@ import StoryCard from "../components/StoryCard";
 function Story() {
   const { userName } = useParams();
   const dispatch = useDispatch();
-  const { storyData } = useSelector((state) => state.story);
-  const handleStory = async () => {
-    try {
-      const result = await axios.get(
-        `${serverURL}/api/story/getByUserName/${userName}`,
-        { withCredentials: true }
-      );
-      dispatch(setStoryData(result.data[0]));
-      console.log(storyData);
-    } catch (error) {
-      console.log(error);
-    }
-  };
+  const storyData = useSelector((state) => state.story.storyData);
 
   useEffect(() => {
+    const handleStory = async () => {
+      dispatch(setStoryData(null));
+      try {
+        const result = await axios.get(
+          `${serverURL}/api/story/getByUserName/${userName}`,
+          { withCredentials: true }
+        );
+        if (Array.isArray(result.data) && result.data.length > 0) {
+          dispatch(setStoryData(result.data[0]));
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    };
+
     if (userName) {
       handleStory();
     }
-  }, [userName]);
+  }, [userName, dispatch]);
 
   return (
     <div className="w-full h-[100vh] bg-black flex justify-center items-center">
-      <StoryCard />
+      {storyData && <StoryCard storyData={storyData} />}
     </div>
   );
 }

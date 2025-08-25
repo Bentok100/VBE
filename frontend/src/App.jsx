@@ -21,6 +21,7 @@ import { io } from "socket.io-client";
 import { setOnlineUsers, setSocket } from "./redux/socketSlice";
 import getFollowingList from "./hooks/getFollowingList";
 import getPrevChatUsers from "./hooks/getPrevChatUsers";
+import getAllStories from "./hooks/getAllStories";
 
 function App() {
   getCurrentUser();
@@ -29,31 +30,29 @@ function App() {
   getAllLoop();
   getFollowingList();
   getPrevChatUsers();
+  getAllStories();
   const { userData } = useSelector((state) => state.user);
   const { socket } = useSelector((state) => state.socket);
   const dispatch = useDispatch();
   useEffect(() => {
-    if (userData) {
-      const socketIo = io(serverURL, {
-        query: {
-          userId: userData._id,
-        },
-      });
-      dispatch(setSocket(socketIo));
+  let socketIo;
 
-      socketIo.on("getOnlineUsers", (users) => {
-        dispatch(setOnlineUsers(users));
-        console.log(users);
-      });
+  if (userData) {
+    socketIo = io(serverURL, {
+      query: {
+        userId: userData._id,
+      },
+    });
 
-      return () => socketIo.close();
-    } else {
-      if (socket) {
-        socket.close();
-        dispatch(setSocket(null));
-      }
-    }
-  }, [userData]);
+    socketIo.on("getOnlineUsers", (users) => {
+      dispatch(setOnlineUsers(users));
+      console.log(users);
+    });
+
+    return () => socketIo.close();
+  }
+}, [userData]);
+
 
   return (
     <Routes>

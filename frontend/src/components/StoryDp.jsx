@@ -1,26 +1,52 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import dp from "../assets/dp.webp";
 import { FiPlusCircle } from "react-icons/fi";
 import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
+import axios from "axios";
+import { serverURL } from "../config";
 
 function StoryDp({ ProfileImage, userName, story }) {
   const navigate = useNavigate();
   const { userData } = useSelector((state) => state.user);
+  const { storyData, storyList } = useSelector((state) => state.story);
+  const [viewed,setViewed] = useState(false)
+  useEffect(()=>{
+    if(story?.viewers?.some((viewer)=>viewer?._id.toString()===userData._id.toString() || viewer?.toString()===userData._id.toString())){
+      setViewed(true)
+    }
+    else{
+      setViewed(false)
+    }
+      
+  },[story,userData,storyData,storyList])
+
+  const handleViewers = async () => {
+    try {
+      const result = await axios.get(`${serverURL}/api/story/view/${story._id}`,{withCredentials:true});
+    } catch (error) {
+      console.log(error);
+    }
+  }
 
   const handleClick = () => {
     if (!story && userName == "Your Self") {
       navigate("/upload");
     } else if (story && userName == "Your Self") {
+      handleViewers();
       navigate(`/story/${userData.userName}`);
+    } else{
+      handleViewers();
+      navigate(`/story/${userName}`);
     }
   };
+
 
   return (
     <div className="flex flex-col w-[80px]">
       <div
         className={`w-[80px] h-[80px] ${
-          story ? "bg-gradient-to-b from-blue-500 to-blue-950" : ""
+          !story?null:!viewed ? "bg-gradient-to-b from-blue-500 to-blue-950" : "bg-gradient-to-b from-gray-500 to-black-950"
         } rounded-full flex justify-center items-center relative`}
         onClick={handleClick}
       >
