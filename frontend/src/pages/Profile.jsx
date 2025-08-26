@@ -20,9 +20,14 @@ function Profile() {
 
   const handleProfile = async () => {
     try {
+      const token = localStorage.getItem("token");
       const result = await axios.get(
         `${serverURL}/api/user/getProfile/${userName}`,
-        { withCredentials: true }
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
       );
       dispatch(setProfileData(result.data));
     } catch (error) {
