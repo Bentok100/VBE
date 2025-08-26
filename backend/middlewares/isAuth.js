@@ -2,12 +2,13 @@ import jwt from "jsonwebtoken";
 
 const isAuth = async (req, res, next) => {
   try {
-    const token = req.cookies.token;
+    const authHeader = req.headers.authorization;
 
-    if (!token) {
+    if (!authHeader || !authHeader.startsWith("Bearer ")) {
       return res.status(400).json({ message: "token is not found" });
     }
 
+    const token = authHeader.split(" ")[1];
     const verifyToken = await jwt.verify(token, process.env.JWT_SECRET_KEY);
 
     req.userId = verifyToken.userId;
