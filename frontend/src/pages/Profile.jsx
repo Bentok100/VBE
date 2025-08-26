@@ -21,8 +21,6 @@ function Profile() {
   const handleProfile = async () => {
     try {
       const token = localStorage.getItem("token");
-      if (!token || token === "null" || token === "undefined") return;
-
       const result = await axios.get(
         `${serverURL}/api/user/getProfile/${userName}`,
         {
@@ -195,7 +193,7 @@ function Profile() {
 
       <div className="w-full min-h-[100vh] flex justify-center">
         <div className="w-full max-w-[900px] flex flex-col items-center rounded-t-[30px] bg-white gap-[20px] pt-[30px] pb-[100px]">
-          {profileData?._id == userData._id && (
+          {profileData?._id === userData._id && (
             <div className="w-[90%] max-w-[500px] h-[80px] bg-white rounded-full flex justify-center items-center gap-[10px]">
               <div
                 className={`${
@@ -221,30 +219,21 @@ function Profile() {
             </div>
           )}
 
-          {profileData?._id == userData._id && (
-            <>
-              {uploadType == "post" &&
-                postData.map(
-                  (post, index) =>
-                    post.author?._id === profileData?._id && (
-                      <Post key={index} post={post} />
-                    )
-                )}
+          {uploadType === "post" &&
+            postData
+              .filter((post) => post.author?._id === profileData?._id)
+              .map((post, index) => <Post key={index} post={post} />)}
 
-              {uploadType == "saved" &&
-                userData.saved.map((post, index) => (
-                  <Post key={index} post={post} />
-                ))}
-            </>
-          )}
+          {uploadType === "saved" &&
+            Array.isArray(userData.saved) &&
+            userData.saved
+              .filter((post) => post)
+              .map((post, index) => <Post key={index} post={post} />)}
 
-          {profileData?._id != userData._id &&
-            postData.map(
-              (post, index) =>
-                post.author?._id === profileData?._id && (
-                  <Post key={index} post={post} />
-                )
-            )}
+          {profileData?._id !== userData._id &&
+            postData
+              .filter((post) => post.author?._id === profileData?._id)
+              .map((post, index) => <Post key={index} post={post} />)}
         </div>
       </div>
     </div>
