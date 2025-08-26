@@ -21,6 +21,8 @@ function Profile() {
   const handleProfile = async () => {
     try {
       const token = localStorage.getItem("token");
+      if (!token || token === "null" || token === "undefined") return;
+
       const result = await axios.get(
         `${serverURL}/api/user/getProfile/${userName}`,
         {
@@ -230,14 +232,12 @@ function Profile() {
                 )}
 
               {uploadType == "saved" &&
-                userData.saved.map(
-                  (post, index) =>
-                    userData.saved.includes(post._id) && (
-                      <Post key={index} post={post} />
-                    )
-                )}
+                userData.saved.map((post, index) => (
+                  <Post key={index} post={post} />
+                ))}
             </>
           )}
+
           {profileData?._id != userData._id &&
             postData.map(
               (post, index) =>
