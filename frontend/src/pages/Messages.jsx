@@ -12,7 +12,7 @@ function Messages() {
 
   const { userData } = useSelector((state) => state.user);
   const { onlineUsers } = useSelector((state) => state.socket);
-  const { prevChatUsers = [] } = useSelector((state) => state.message); // fallback to empty array
+  const { prevChatUsers = [] } = useSelector((state) => state.message);
 
   return (
     <div className="w-full min-h-screen flex flex-col bg-black gap-5 p-2.5">
