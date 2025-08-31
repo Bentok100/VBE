@@ -15,7 +15,7 @@ dotenv.config();
 
 
 app.use(cors({
-  origin:  ['http://localhost:5173', 'https://vbe-frontend-fz5n.onrender.com'], // frontend URL
+  origin:  ['http://localhost:5173', 'https://vibe-2dba.onrender.com'], // frontend URL
   credentials: true,              // allow cookies, headers
 }));
 app.use(express.json());
