@@ -14,7 +14,7 @@ import { setLoopData } from "../redux/loopSlice.js";
 import { ClipLoader } from "react-spinners";
 import { setUserData } from "../redux/userSlice.js";
 
-function Upload(req, res) {
+function Upload(req , res) {
   const navigate = useNavigate();
   const [uploadType, setUploadType] = useState("post");
 
