@@ -1,1 +1,1 @@
-export const serverURL = "https://vbe.onrender.com";
+export const serverURL = "https://vibe-backend-csqd.onrender.com";
