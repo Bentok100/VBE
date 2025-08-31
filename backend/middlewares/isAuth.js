@@ -2,20 +2,21 @@ import jwt from "jsonwebtoken";
 
 const isAuth = async (req, res, next) => {
   try {
-    const authHeader = req.headers.authorization;
+    const token =
+      req.cookies?.token ||
+      (req.headers.authorization?.startsWith("Bearer ") &&
+        req.headers.authorization.split(" ")[1]);
 
-    if (!authHeader || !authHeader.startsWith("Bearer ")) {
-      return res.status(400).json({ message: "token is not found" });
+    if (!token) {
+      return res.status(400).json({ message: "Token not found" });
     }
 
-    const token = authHeader.split(" ")[1];
-    const verifyToken = await jwt.verify(token, process.env.JWT_SECRET_KEY);
-
+    const verifyToken = jwt.verify(token, process.env.JWT_SECRET_KEY);
     req.userId = verifyToken.userId;
 
     next();
   } catch (error) {
-    return res.status(500).json({ message: `is auth error ${error}` });
+    return res.status(401).json({ message: "Invalid or expired token" });
   }
 };
 
