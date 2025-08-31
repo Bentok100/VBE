@@ -18,22 +18,20 @@ function Profile() {
   const { postData } = useSelector((state) => state.post);
   const [uploadType, setUploadType] = useState("post");
 
-  const handleProfile = async () => {
-    try {
-      const token = localStorage.getItem("token");
-      const result = await axios.get(
-        `${serverURL}/api/user/getProfile/${userName}`,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-      dispatch(setProfileData(result.data));
-    } catch (error) {
-      console.error("API error:", error.response?.data || error.message);
-    }
-  };
+ const handleProfile = async () => {
+  try {
+    const result = await axios.get(
+      `${serverURL}/api/user/getProfile/${userName}`,
+      {
+        withCredentials: true,
+      }
+    );
+    dispatch(setProfileData(result.data));
+  } catch (error) {
+    console.error("API error:", error.response?.data || error.message);
+  }
+};
+
 
   useEffect(() => {
     handleProfile();
