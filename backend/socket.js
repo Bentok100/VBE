@@ -8,7 +8,7 @@ const io = new Server(server, {
   cors: {
    origin: [
       'http://localhost:5173',
-      'https://vbe-frontend-fz5n.onrender.com'
+      'https://vibe-2dba.onrender.com'
     ],
     methods: ["GET", "POST"],
     credentials: true
