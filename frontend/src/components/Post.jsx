@@ -29,31 +29,39 @@ function Post({ post }) {
   // ---------------- LINK DETECTION FUNCTION ----------------
 
   const renderCaption = (text = "") => {
-  const urlRegex = /((https?:\/\/)?(www\.)?[^\s]+\.[^\s]+)/g;
+  const urlRegex = /(https?:\/\/[^\s]+|www\.[^\s]+)/;
 
-  return text.split(urlRegex).map((part, index) => {
-    if (part && urlRegex.test(part)) {
-      const href = part.startsWith("http")
-        ? part
-        : `https://${part}`;
+  return text.split(" ").map((word, index) => {
+    if (urlRegex.test(word)) {
+      const href = word.startsWith("http")
+        ? word
+        : `https://${word}`;
 
       return (
-        <a
-          key={index}
-          href={href}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="text-blue-600 underline"
-        >
-          {part}
-        </a>
+        <React.Fragment key={index}>
+          <span className="font-semibold text-red-500 mr-[5px]">
+            PROMOTION
+          </span>
+
+          <a
+            href={href}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-blue-600 underline mr-[5px]"
+          >
+            {word}
+          </a>
+        </React.Fragment>
       );
     }
 
-    return part;
+    return (
+      <span key={index} className="mr-[5px]">
+        {word}
+      </span>
+    );
   });
 };
-
   // ---------------- LIKE FUNCTION ----------------
 
   const handleLike = async () => {
