@@ -28,31 +28,31 @@ function Post({ post }) {
 
   // ---------------- LINK DETECTION FUNCTION ----------------
 
-  const renderCaption = (text) => {
-    const urlRegex = /((https?:\/\/)?(www\.)?[^\s]+\.[^\s]+)/g;
+  const renderCaption = (text = "") => {
+  const urlRegex = /((https?:\/\/)?(www\.)?[^\s]+\.[^\s]+)/g;
 
-    return text.split(urlRegex).map((part, index) => {
-      if (part.match(urlRegex)) {
-        const href = part.startsWith("http")
-          ? part
-          : `https://${part}`;
+  return text.split(urlRegex).map((part, index) => {
+    if (part && urlRegex.test(part)) {
+      const href = part.startsWith("http")
+        ? part
+        : `https://${part}`;
 
-        return (
-          <a
-            key={index}
-            href={href}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="text-blue-600 underline break-all"
-          >
-            {part}
-          </a>
-        );
-      }
+      return (
+        <a
+          key={index}
+          href={href}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="text-blue-600 underline"
+        >
+          {part}
+        </a>
+      );
+    }
 
-      return part;
-    });
-  };
+    return part;
+  });
+};
 
   // ---------------- LIKE FUNCTION ----------------
 
